@@ -1,2 +1,2 @@
 # Flask
-Learning about Flask from class Pemrogram Kriptografi
+Learning about Flask from Cryptographic Programming class
