@@ -5,6 +5,12 @@
 <title>M Faris Al Fatih</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  html, body {
+    background: url("{{ url_for('static', filename='4k_Mountain_Peak.jpg') if image_in_static else '/4k_Mountain_Peak.jpg' }}") no-repeat center center fixed;
+    background-size: cover;
+  }
+</style>
 </head>
 <body>
       
