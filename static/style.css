@@ -1,17 +1,62 @@
 html, body {
   height: 100%;
   margin: 0;
-  overflow: hidden;   /* ADD THIS */
+  overflow: hidden;
 }
 
 html {
-  background: url("Sky_Serene_4k.jpg") no-repeat center/cover;
+  background: url("4k_Mountain_Peak.jpg") no-repeat center/cover;
 }
 
 body {
   font-family: Arial;
   min-height: 100vh;
-  background: url("Sky_Serene_4k.jpg") no-repeat center/cover;
+  background: url("4k_Mountain_Peak.jpg") no-repeat center/cover;
+  background-attachment: fixed;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 340px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  max-height: 90vh;
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.input-field {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: none;html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+html {
+  background: url("4k_Mountain_Peak.jpg") no-repeat center/cover;
+}
+
+body {
+  font-family: Arial;
+  min-height: 100vh;
+  background: url("4k_Mountain_Peak.jpg") no-repeat center/cover;
   background-attachment: fixed;
 
   display: flex;
@@ -62,67 +107,39 @@ button {
   width: 100%;
   padding: 10px;
 
-  background: rgba(255,255,255,0.8);  /* same as your register */
+  background: rgba(255,255,255,0.8);
   border: none;
   cursor: pointer;
-  margin-top: 10px;   /* IMPORTANT: spacing fix */
+  margin-top: 10px;
   border-radius: 1px;
 
+  border-bottom: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-field label {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  font-size: 12px;
+  color: #fff;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 1px;
   transition: 0.2s;
 }
     
 button:hover {
-  background: rgba(255,255,255,1);   /* slightly brighter */
-}
-    
-.view {
-  background: transparent;
-  border: 1px solid #fff;
-  margin-top: 8px;
-  color: #fff;
-}
-
-.view:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-.alert {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px;
-  color: white;
-  border-radius: 6px;
-  z-index: 9999;
-  min-width: 220px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-
-  opacity: 0;                  /* start hidden */
-  transform: translateY(-10px);/* slight move */
-  transition: all 0.4s ease;   /* smooth */
-}
-
-/* SHOW (fade in) */
-.alert.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* HIDE (fade out) */
-.alert.hide {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.success {
-  background-color: #4CAF50;
-}
-
-.closebtn {
-  margin-left: 15px;
-  float: right;
-  font-weight: bold;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 1);
 }
 
 p {
