@@ -1,101 +1,78 @@
 html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
 body {
-    font-family: Arial;
-    min-height: 100vh;
-    background: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-family: Arial;
+  min-height: 100vh;
+  background-color: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wrapper {
-    width: 340px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    max-height: 90vh;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  padding: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  max-height: 90vh;
+  color: #fff;
+  text-align: center;
 }
 
 h2 {
-    text-align: center;
-    color: #fff;
-    margin-bottom: 30px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
 }
 
 .input-field {
-    position: relative;
-    margin-bottom: 25px;
+  position: relative;
+  margin-bottom: 25px;
 }
 
 .input-field input {
-    width: 100%;
-    padding: 10px 0;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    outline: none;
-    color: #fff;
-    font-size: 16px;
-    transition: 0.3s;
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
 }
 
 .input-field label {
-    position: absolute;
-    left: 0;
-    top: 10px;
-    color: #ccc;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.3s;
-}
-
-.input-field input:focus ~ label,
-.input-field input:valid ~ label {
-    top: -15px;
-    font-size: 12px;
-    color: #fff;
-}
-
-.input-field input:focus {
-    border-bottom: 2px solid #fff;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  font-size: 12px;
+  color: #fff;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    background: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-    transition: 0.3s;
+  width: 100%;
+  padding: 10px;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 1px;
+  color: #000;
+  font-weight: bold;
+  transition: 0.2s;
 }
-
+    
 button:hover {
-    background: #ccc;
+  background: rgba(255,255,255,1);
 }
 
-.result-content {
-    color: #fff;
-    font-size: 16px;
-    line-height: 1.6;
-    text-align: left;
-}
-
-.result-content p {
-    margin: 15px 0;
-}
-
-.result-content strong {
-    color: #fff;
+p {
+  margin: 15px 0;
+  font-size: 16px;
+  text-align: center;
 }
