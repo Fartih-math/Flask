@@ -29,6 +29,42 @@ h2 {
   margin-bottom: 30px;
 }
 
+.wrapper p {
+  text-align: left;
+  color: #fff;
+  margin: 14px 0;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.wrapper p strong {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.wrapper p span { 
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.wrapper p:last-of-type {
+  text-align: center;
+  justify-content: center;
+  margin-top: 40px;
+  padding-top: 15px;
+  border-bottom: none;
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .input-field {
   position: relative;
   margin-bottom: 25px;
@@ -68,11 +104,4 @@ button {
     
 button:hover {
   background: rgba(255, 255, 255, 1);
-}
-
-p {
-  color: #fff;
-  text-align: justified;
-  margin: 15px 0;
-  font-size: 16px;
 }
