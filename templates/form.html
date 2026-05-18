@@ -1,17 +1,25 @@
+<!DOCTYPE html>
 <html>
 <head>
-   <title>Demo Text</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Text</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-   <h2>Demo Text</h2>
-   
-   <form action="/" method="post">
-      Nama depan:<br />
-      <input type="text" name="namaDepan" size="25" /><br />
-      Nama belakang:<br />
-      <input type="text" name="namaBelakang" size="25" />
-      <p><input type="submit"  value="Kirim" /></p>
-   </form>
-   
+    <div class="wrapper">
+        <form action="/" method="post">
+            <h2>Demo Text</h2>
+            <div class="input-field">
+                <input type="text" name="namaDepan" required>
+                <label>Enter first name</label>
+            </div>
+            <div class="input-field">
+                <input type="text" name="namaBelakang" required>
+                <label>Enter last name</label>
+            </div>
+            <button type="submit">Kirim</button>
+        </form>
+    </div>
 </body>
 </html>
