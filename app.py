@@ -8,14 +8,16 @@ def index():
         namaDepan = request.form['namaDepan']
         namaBelakang = request.form['namaBelakang']
         nama = '%s %s' % (namaDepan, namaBelakang)
+        
         p = nama
-        c = ''
+        c_encrypted = ''
         k = 3
+        
         for i in range(len(p)):
-            c = chr(ord(p[i]) + k)
-            c = c + c
+            shifted_char = chr(ord(p[i]) + k)
+            c_encrypted = c_encrypted + shifted_char
             
-        return render_template('response.html', nama_asli=nama, nama_encrypt=c)
+        return render_template('response.html', nama_asli=nama, nama_encrypt=c_encrypted)
         
     return render_template('form.html')
 
