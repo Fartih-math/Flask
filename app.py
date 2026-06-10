@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import secrets
 import os
 
-application = app
 app = Flask(__name__)
 
 database_url = os.environ.get('DATABASE_URL')
