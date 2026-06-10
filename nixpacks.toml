@@ -1,2 +1,15 @@
+# nixpacks.toml
+# This ensures Railway correctly identifies and builds your Python application.
+
+[phases.setup]
+# Apt dependencies needed for compiling Python packages.
+nixPkgs = ["...", "gcc"]
+# On newer nixpkgs, "gcc" is included by default, but this ensures build tools are present.
+
+[phases.install]
+# Install dependencies from your requirements file.
+cmds = ["pip install -r requirements.txt"]
+
 [start]
-cmd = "gunicorn app:app"
+# The command to run your application.
+cmd = "gunicorn app:app --bind 0.0.0.0:$PORT"
