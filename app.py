@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, get_flashed_messages
-from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Equipment, BorrowSession, BorrowItem
 from encryption_utils import encrypt_name, decrypt_name
 from qr_utils import generate_qr_code_base64
@@ -17,22 +16,33 @@ app.config['SECRET_KEY'] = 'your-secret-key-change-this'
 db.init_app(app)
 
 translations = {
+    # index.html:
     "Equipment Loan Tracker": {"en": "Equipment Loan Tracker", "id": "Pelacak Pinjaman Peralatan"},
     "Borrow & Return with QR Security": {"en": "Borrow & Return with QR Security", "id": "Pinjam & Kembalikan dengan Keamanan QR"},
     "Login as Customer": {"en": "Login as Customer", "id": "Masuk sebagai Pelanggan"},
     "Login as Admin": {"en": "Login as Admin", "id": "Masuk sebagai Admin"},
     "Don't have an account? Register here": {"en": "Don't have an account? Register here", "id": "Tidak punya akun? Daftar di sini"},
+    # login customer:
     "Login": {"en": "Login", "id": "Masuk"},
     "Access your account": {"en": "Access your account", "id": "Akses akun anda"},
     "Username": {"en": "Username", "id": "Nama Pengguna"},
     "Password": {"en": "Password", "id": "Kata Sandi"},
+    "Login": {"en": "Login", "id": "Masuk"},
+    # Admin_Login.html:
     "Admin Login": {"en": "Admin Login", "id": "Masuk Admin"},
     "Access the administration panel": {"en": "Access the administration panel", "id": "Akses panel administrasi"},
+    "Username": {"en": "Username", "id": "Nama Pengguna"},
+    "Password": {"en": "Password", "id": "Kata Sandi"},
+    "Login as Admin": {"en": "Login as Admin", "id": "Masuk sebagai Admin"},
+    # Register.html:
     "Register": {"en": "Register", "id": "Daftar"},
     "Create a new account": {"en": "Create a new account", "id": "Buat akun baru"},
+    "Username": {"en": "Username", "id": "Nama Pengguna"},
+    "Password": {"en": "Password", "id": "Kata Sandi"},
     "Full Name": {"en": "Full Name", "id": "Nama Lengkap"},
     "Customer": {"en": "Customer", "id": "Pelanggan"},
     "Admin": {"en": "Admin", "id": "Admin"},
+    # Customer Dashboard:
     "Welcome back": {"en": "Welcome back", "id": "Selamat datang kembali"},
     "Borrow Equipment": {"en": "Borrow Equipment", "id": "Pinjam Peralatan"},
     "My Loans": {"en": "My Loans", "id": "Pinjaman Saya"},
@@ -48,6 +58,12 @@ translations = {
     "Return": {"en": "Return", "id": "Kembalikan"},
     "Show the QR code to admin when returning items": {"en": "Show the QR code to admin when returning items", "id": "Tunjukkan kode QR ke admin saat mengembalikan barang"},
     "Select an option from the left menu to get started": {"en": "Select an option from the left menu to get started", "id": "Pilih opsi dari menu kiri untuk memulai"},
+    # Borrow Equipment:
+    "Welcome back": {"en": "Welcome back", "id": "Selamat datang kembali"},
+    "Borrow Equipment": {"en": "Borrow Equipment", "id": "Pinjam Peralatan"},
+    "My Loans": {"en": "My Loans", "id": "Pinjaman Saya"},
+    "Profile": {"en": "Profile", "id": "Profil"},
+    "Logout": {"en": "Logout", "id": "Keluar"},
     "Available Equipment": {"en": "Available Equipment", "id": "Peralatan Tersedia"},
     "Name": {"en": "Name", "id": "Nama"},
     "Amount": {"en": "Amount", "id": "Jumlah"},
@@ -57,17 +73,27 @@ translations = {
     "Out of stock": {"en": "Out of stock", "id": "Habis"},
     "Borrow": {"en": "Borrow", "id": "Pinjam"},
     "Next": {"en": "Next", "id": "Selanjutnya"},
+    # Cart:
     "Your Cart": {"en": "Your Cart", "id": "Keranjang Anda"},
     "Item": {"en": "Item", "id": "Barang"},
     "Quantity": {"en": "Quantity", "id": "Jumlah"},
     "Due Date": {"en": "Due Date", "id": "Tanggal Jatuh Tempo"},
     "Confirm Borrowing": {"en": "Confirm Borrowing", "id": "Konfirmasi Peminjaman"},
     "Cart is empty": {"en": "Cart is empty", "id": "Keranjang kosong"},
+    # Success loan:
     "Your Borrowing QR Code": {"en": "Your Borrowing QR Code", "id": "Kode QR Peminjaman Anda"},
     "Session": {"en": "Session", "id": "Sesi"},
     "Due date": {"en": "Due date", "id": "Tanggal jatuh tempo"},
     "Show this QR code to admin when returning items": {"en": "Show this QR code to admin when returning items", "id": "Tunjukkan kode QR ini ke admin saat mengembalikan barang"},
     "View My Loans": {"en": "View My Loans", "id": "Lihat Pinjaman Saya"},
+    # My Loan:
+    "Welcome back": {"en": "Welcome back", "id": "Selamat datang kembali"},
+    "Borrow Equipment": {"en": "Borrow Equipment", "id": "Pinjam Peralatan"},
+    "My Loans": {"en": "My Loans", "id": "Pinjaman Saya"},
+    "Profile": {"en": "Profile", "id": "Profil"},
+    "Logout": {"en": "Logout", "id": "Keluar"},
+    "My Loans": {"en": "My Loans", "id": "Pinjaman Saya"},
+    "Due Date": {"en": "Due Date", "id": "Tanggal Jatuh Tempo"},
     "Status": {"en": "Status", "id": "Status"},
     "Details": {"en": "Details", "id": "Detail"},
     "View Details": {"en": "View Details", "id": "Lihat Detail"},
@@ -78,19 +104,44 @@ translations = {
     "active": {"en": "active", "id": "aktif"},
     "damaged": {"en": "damaged", "id": "rusak"},
     "missing": {"en": "missing", "id": "hilang"},
+    # View Detail:
     "Loan Details": {"en": "Loan Details", "id": "Detail Pinjaman"},
     "Borrow Date": {"en": "Borrow Date", "id": "Tanggal Pinjam"},
+    "Due Date": {"en": "Due Date", "id": "Tanggal Jatuh Tempo"},
+    "Status": {"en": "Status", "id": "Status"},
+    "Active": {"en": "Active", "id": "Aktif"},
     "Items Borrowed": {"en": "Items Borrowed", "id": "Barang yang Dipinjam"},
+    "Item": {"en": "Item", "id": "Barang"},
+    "Quantity": {"en": "Quantity", "id": "Jumlah"},
     "Show QR Code": {"en": "Show QR Code", "id": "Tampilkan Kode QR"},
     "Back to My Loans": {"en": "Back to My Loans", "id": "Kembali ke Pinjaman Saya"},
+    # Show QR:
+    "Your Borrowing QR Code": {"en": "Your Borrowing QR Code", "id": "Kode QR Peminjaman Anda"},
+    "Session": {"en": "Session", "id": "Sesi"},
+    "Due date": {"en": "Due date", "id": "Tanggal jatuh tempo"},
+    "Show this QR code to admin when returning items": {"en": "Show this QR code to admin when returning items", "id": "Tunjukkan kode QR ini ke admin saat mengembalikan barang"},
+    "View My Loans": {"en": "View My Loans", "id": "Lihat Pinjaman Saya"},
+    # Profile.html:
+    "Welcome back": {"en": "Welcome back", "id": "Selamat datang kembali"},
+    "Borrow Equipment": {"en": "Borrow Equipment", "id": "Pinjam Peralatan"},
+    "My Loans": {"en": "My Loans", "id": "Pinjaman Saya"},
+    "Profile": {"en": "Profile", "id": "Profil"},
+    "Logout": {"en": "Logout", "id": "Keluar"},
+    "Profile": {"en": "Profile", "id": "Profil"},
+    "Username": {"en": "Username", "id": "Nama Pengguna"},
+    "Full Name": {"en": "Full Name", "id": "Nama Lengkap"},
     "New Password": {"en": "New Password", "id": "Kata Sandi Baru"},
     "Leave blank to keep unchanged": {"en": "Leave blank to keep unchanged", "id": "Kosongkan jika tidak ingin mengubah"},
     "Update Profile": {"en": "Update Profile", "id": "Perbarui Profil"},
     "Profile updated successfully!": {"en": "Profile updated successfully!", "id": "Profil berhasil diperbarui!"},
+    # Admin Dashboard:
     "Admin Panel": {"en": "Admin Panel", "id": "Panel Admin"},
     "Dashboard": {"en": "Dashboard", "id": "Dasbor"},
     "Scan QR": {"en": "Scan QR", "id": "Pindai QR"},
+    "Logout": {"en": "Logout", "id": "Keluar"},
     "Equipment Management": {"en": "Equipment Management", "id": "Manajemen Peralatan"},
+    "Name": {"en": "Name", "id": "Nama"},
+    "Amount": {"en": "Amount", "id": "Jumlah"},
     "Add New Equipment": {"en": "Add New Equipment", "id": "Tambah Peralatan Baru"},
     "Equipment Name": {"en": "Equipment Name", "id": "Nama Peralatan"},
     "Initial Amount": {"en": "Initial Amount", "id": "Jumlah Semula"},
@@ -104,8 +155,13 @@ translations = {
     "Delete": {"en": "Delete", "id": "Hapus"},
     "Borrowing Sessions": {"en": "Borrowing Sessions", "id": "Sesi Peminjaman"},
     "User": {"en": "User", "id": "Pengguna"},
+    "Borrow Date": {"en": "Borrow Date", "id": "Tanggal Pinjam"},
+    "Due Date": {"en": "Due Date", "id": "Tanggal Jatuh Tempo"},
     "Return Date": {"en": "Return Date", "id": "Tanggal Kembali"},
+    "Status": {"en": "Status", "id": "Status"},
+    "Active": {"en": "Active", "id": "Aktif"},
     "Items": {"en": "Items", "id": "Barang"},
+    # Scan_QR.html:
     "Scan QR Code": {"en": "Scan QR Code", "id": "Pindai Kode QR"},
     "Upload an image containing the QR code, or use your camera.": {"en": "Upload an image containing the QR code, or use your camera.", "id": "Unggah gambar yang berisi kode QR, atau gunakan kamera."},
     "Start Camera": {"en": "Start Camera", "id": "Nyalakan Kamera"},
@@ -114,12 +170,18 @@ translations = {
     "No QR code found in image.": {"en": "No QR code found in image.", "id": "Tidak ada kode QR dalam gambar."},
     "Camera access denied or not available.": {"en": "Camera access denied or not available.", "id": "Akses kamera ditolak atau tidak tersedia."},
     "Invalid QR code (not a return URL).": {"en": "Invalid QR code (not a return URL).", "id": "Kode QR tidak valid (bukan URL pengembalian)."},
+    "Admin": {"en": "Admin", "id": "Admin"},
+    "Dashboard": {"en": "Dashboard", "id": "Dasbor"},
+    "Scan QR": {"en": "Scan QR", "id": "Pindai QR"},
+    "Logout": {"en": "Logout", "id": "Keluar"},
+    # return_session.html:
     "Return Borrowing Session": {"en": "Return Borrowing Session", "id": "Kembalikan Sesi Peminjaman"},
     "User:": {"en": "User:", "id": "Pengguna:"},
     "Borrow Date:": {"en": "Borrow Date:", "id": "Tanggal Pinjam:"},
     "Due Date:": {"en": "Due Date:", "id": "Tanggal Jatuh Tempo:"},
     "Items:": {"en": "Items:", "id": "Barang:"},
     "Equipment": {"en": "Equipment", "id": "Peralatan"},
+    "Quantity": {"en": "Quantity", "id": "Jumlah"},
     "Return status:": {"en": "Return status:", "id": "Status pengembalian:"},
     "Normal (return items to stock)": {"en": "Normal (return items to stock)", "id": "Normal (kembalikan barang ke stok)"},
     "Missing (items not returned)": {"en": "Missing (items not returned)", "id": "Hilang (barang tidak dikembalikan)"},
@@ -131,7 +193,7 @@ translations = {
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(username='admin').first():
-        admin = User(username='admin', password=generate_password_hash('admin123'), name='Administrator', role='admin')
+        admin = User(username='admin', password='admin123', name='Administrator', role='admin')
         db.session.add(admin)
         db.session.commit()
 
@@ -151,7 +213,7 @@ def register():
         role = request.form['role']
         if User.query.filter_by(username=username).first():
             return "Username already exists", 400
-        user = User(username=username, password=generate_password_hash(password), name=name, role=role)
+        user = User(username=username, password=password, name=name, role=role)
         db.session.add(user)
         db.session.commit()
         session['user_id'] = user.id
@@ -168,8 +230,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if not user or not check_password_hash(user.password, password):
+        user = User.query.filter_by(username=username, password=password).first()
+        if not user:
             return "Invalid credentials", 401
         session['user_id'] = user.id
         session['username'] = user.username
@@ -200,8 +262,6 @@ def borrow_equipment():
 
 @app.route('/update_cart', methods=['POST'])
 def update_cart():
-    if 'user_id' not in session or session.get('role') != 'customer':
-        return jsonify({'success': False, 'error': 'Unauthorized'}), 401
     data = request.get_json()
     cart = data.get('cart', [])
     session['temp_cart'] = cart
@@ -302,15 +362,12 @@ def profile():
         new_username = request.form['username']
         new_name = request.form['name']
         new_password = request.form['password']
-        if new_username and new_username != user.username:
-            if User.query.filter_by(username=new_username).first():
-                flash('Username already exists', 'error')
-                return redirect(url_for('profile'))
+        if new_username:
             user.username = new_username
         if new_name:
             user.name = new_name
         if new_password:
-            user.password = generate_password_hash(new_password)
+            user.password = new_password
         db.session.commit()
         session['username'] = user.username
         flash('Profile updated successfully!', 'success')
@@ -322,8 +379,8 @@ def admin_login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username, role='admin').first()
-        if user and check_password_hash(user.password, password):
+        user = User.query.filter_by(username=username, password=password, role='admin').first()
+        if user:
             session['user_id'] = user.id
             session['username'] = user.username
             session['role'] = 'admin'
@@ -334,7 +391,9 @@ def admin_login():
 
 @app.route('/admin/logout')
 def admin_logout():
-    session.clear()
+    session.pop('admin', None)
+    session.pop('user_id', None)
+    session.pop('role', None)
     return redirect(url_for('index'))
 
 @app.route('/admin/dashboard')
@@ -350,6 +409,7 @@ def admin_edit_equipment():
     if session.get('role') != 'admin':
         return "Unauthorized", 401
     action = request.form['action']
+
     if action == 'add':
         name = request.form.get('name', '').strip()
         amount_str = request.form.get('amount', '')
@@ -358,6 +418,7 @@ def admin_edit_equipment():
         amount = int(amount_str)
         equip = Equipment(name=name, amount=amount)
         db.session.add(equip)
+
     elif action == 'update':
         equip_id = request.form.get('id')
         if not equip_id:
@@ -365,12 +426,15 @@ def admin_edit_equipment():
         equip = Equipment.query.get(equip_id)
         if not equip:
             return "Equipment not found", 404
+
         new_name = request.form.get('name', '').strip()
         new_amount_str = request.form.get('amount', '').strip()
+
         if new_name:
             equip.name = new_name
         if new_amount_str:
             equip.amount = int(new_amount_str)
+
     elif action == 'delete':
         equip_id = request.form.get('id')
         if not equip_id:
@@ -383,6 +447,7 @@ def admin_edit_equipment():
             db.session.delete(equip)
         else:
             return "Equipment not found", 404
+
     db.session.commit()
     return redirect(url_for('admin_dashboard'))
 
@@ -433,15 +498,12 @@ def admin_profile():
         new_username = request.form['username']
         new_name = request.form['name']
         new_password = request.form['password']
-        if new_username and new_username != user.username:
-            if User.query.filter_by(username=new_username).first():
-                flash('Username already exists', 'error')
-                return redirect(url_for('admin_profile'))
+        if new_username:
             user.username = new_username
         if new_name:
             user.name = new_name
         if new_password:
-            user.password = generate_password_hash(new_password)
+            user.password = new_password
         db.session.commit()
         session['username'] = user.username
         flash('Profile updated successfully!', 'success')
