@@ -1,5 +1,6 @@
-Flask>=3.0.0
-Flask-SQLAlchemy>=3.1.1
-cryptography>=42.0.0
-qrcode>=7.4.2
-Pillow>=10.3.0
+Flask
+gunicorn
+Flask-SQLAlchemy
+cryptography
+qrcode
+Pillow
