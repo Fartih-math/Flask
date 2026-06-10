@@ -4,9 +4,13 @@ from encryption_utils import encrypt_name, decrypt_name
 from qr_utils import generate_qr_code_base64
 from datetime import datetime, timedelta
 import secrets
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///equipment.db'
+database_url = os.environ.get('DATABASE_URL')
+if database_url and database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///equipment.db'
 app.config['SECRET_KEY'] = 'your-secret-key-change-this'
 db.init_app(app)
 
