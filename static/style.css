@@ -1,0 +1,592 @@
+/* ========== GLOBAL RESET & BASE ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    overflow-x: hidden;
+}
+
+/* ========== TOP NAVBAR (admin & customer dashboards) ========== */
+.top-nav {
+    background: #2c3e50;
+    color: white;
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.logo span { color: #ffd966; }
+.logo:hover { opacity: 0.8; }
+.hamburger {
+    font-size: 28px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    display: none;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ========== SIDEBAR (admin & customer) ========== */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 260px;
+    height: calc(100% - 60px);
+    background: #1a252f;
+    transition: transform 0.3s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.sidebar.closed { transform: translateX(-100%); }
+.sidebar ul { list-style: none; }
+.sidebar .top-menu { padding: 0; margin: 0; }
+.sidebar li a {
+    display: block;
+    padding: 12px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+}
+.sidebar li a:hover {
+    background: #2c3e50;
+    border-left-color: #ffd966;
+    padding-left: 25px;
+}
+.sidebar .bottom-menu {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+/* ========== MAIN CONTENT (dashboard pages) ========== */
+.main-content {
+    margin-top: 60px;
+    margin-left: 260px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    min-height: calc(100vh - 60px);
+    background: #f0f2f5;
+}
+.main-content.expanded { margin-left: 0; }
+
+/* ========== CARDS & TABLES (shared) ========== */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.card h3 { margin-bottom: 20px; color: #2c3e50; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th { background: #f8f9fa; }
+
+/* ========== EQUIPMENT MANAGEMENT FORMS (admin) ========== */
+.inline-forms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+.form-card {
+    flex: 1;
+    min-width: 250px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+.form-card h4 {
+    margin-bottom: 12px;
+    color: #2c3e50;
+    font-size: 1rem;
+    border-left: 3px solid #3498db;
+    padding-left: 10px;
+}
+.form-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.form-card input {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 100%;
+}
+.form-card button {
+    width: 100%;
+    background: #2c3e50;
+}
+.form-card button.delete {
+    background: #e74c3c;
+}
+.form-card button.delete:hover {
+    background: #c0392b;
+}
+button, .btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover { background: #2c3e50; }
+
+/* ========== WELCOME CARD & STEPS (customer dashboard) ========== */
+.welcome-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.welcome-card h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+.welcome-card p {
+    color: #555;
+    line-height: 1.5;
+}
+.steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+.step {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+.step .number {
+    background: #2c3e50;
+    color: white;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* ========== BORROW EQUIPMENT PAGE ========== */
+.borrow-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.borrow-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.borrow-table th, .borrow-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+.borrow-table th {
+    background: #f8f9fa;
+    padding: 12px;
+}
+.borrow-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 80px;
+}
+.qty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.qty-control button {
+    background: #95a5a6;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 32px;
+}
+.qty-input {
+    width: 60px;
+    text-align: center;
+    padding: 4px;
+}
+.next-btn {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.next-btn-container {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* ========== LOAN DETAILS & MY LOANS ========== */
+.loan-details-card, .loans-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.loan-details-card h2, .loans-card h2 {
+    margin-bottom: 20px;
+}
+.loan-details-card p {
+    margin-bottom: 10px;
+}
+.late-text {
+    color: red;
+    font-weight: bold;
+}
+.details-btn {
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.btn-qr {
+    background: #2c3e50;
+    color: white;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.btn-back {
+    background: #95a5a6;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.qr-button-container {
+    margin-top: 25px;
+}
+.back-button-container {
+    margin-top: 20px;
+}
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.items-table th, .items-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+.items-table th {
+    background: #f8f9fa;
+    padding: 12px;
+}
+
+/* ========== PROFILE PAGES (customer & admin) ========== */
+.profile-container {
+    max-width: 500px;
+}
+.profile-container h2 {
+    margin-bottom: 20px;
+}
+.profile-field {
+    margin-bottom: 15px;
+}
+.profile-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.profile-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+}
+.profile-update-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.flash-messages {
+    padding: 20px 0px;
+}
+.flash-message {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border: 1px solid;
+}
+.flash-success {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+.flash-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+/* ========== QR MODAL ========== */
+.qr-center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+.qr-content {
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+.qr-content h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+.qr-content p {
+    margin: 5px 0;
+}
+.qr-image-wrapper {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.qr-image-wrapper img {
+    max-width: 250px;
+    height: auto;
+}
+.qr-note {
+    margin: 10px 0 25px;
+}
+.qr-back-btn {
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* ========== GLASSMORPHISM (home, login, register, admin_login) ========== */
+.home-page {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/MoonriseRolling.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+}
+.top-right {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 40px 30px;
+    width: 380px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.glass-card h1 {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+.glass-card .sub {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.btn-glass {
+    display: block;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 12px;
+    border-radius: 40px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.02);
+}
+.register-link {
+    color: #ffd966;
+    text-decoration: none;
+    font-size: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+.register-link:hover {
+    text-decoration: underline;
+}
+.glass-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: 0.2s;
+}
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #ffd966;
+}
+select.glass-input option {
+    background: #2c3e50;
+    color: white;
+}
+
+/* ========== LANGUAGE TOGGLE (shared) ========== */
+.lang-switch {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.lang-option {
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: 0.2s;
+    color: white;
+}
+.lang-active {
+    background: #2c3e50;
+    color: #ffd966;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.lang-inactive {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+}
+.lang-switch:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========== RESPONSIVE (mobile) ========== */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .inline-forms {
+        flex-direction: column;
+    }
+}
+
+/* ========== return_session.html ========== */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}

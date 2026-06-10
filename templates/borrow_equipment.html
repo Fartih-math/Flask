@@ -1,0 +1,107 @@
+{% extends "customer_dashboard.html" %}
+{% block content %}
+<div class="borrow-card">
+    <h2 style="margin-bottom: 20px;">{{ _('Available Equipment') }}</h2>
+    <table class="borrow-table">
+        <colgroup>
+            <col style="width: 30%;">
+            <col style="width: 15%;">
+            <col style="width: 25%;">
+            <col style="width: 30%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>{{ _('Name') }}</th>
+                <th>{{ _('Amount') }}</th>
+                <th>{{ _('Availability') }}</th>
+                <th>{{ _('Action') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eq in equipment %}
+            <tr id="row_{{ eq.id }}">
+                <td>{{ eq.name }}</td>
+                <td>{{ eq.amount }}</td>
+                <td>{% if eq.amount > 0 %}{{ _('Available') }}{% else %}{{ _('Out of stock') }}{% endif %}</td>
+                <td class="action-cell" data-id="{{ eq.id }}" data-max="{{ eq.amount }}">
+                    {% if eq.amount > 0 %}
+                        <button class="borrow-btn" data-id="{{ eq.id }}">{{ _('Borrow') }}</button>
+                    {% else %}
+                        <span style="color: #999;">{{ _('None') }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="next-btn-container">
+        <button id="nextCartBtn" class="next-btn">{{ _('Next') }}</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        function getQtyInput(rowId) {
+            return document.querySelector(`#row_${rowId} .qty-input`);
+        }
+        function showQuantitySelector(equipId, maxQty) {
+            const cell = document.querySelector(`.action-cell[data-id='${equipId}']`);
+            cell.innerHTML = `
+                <div class="qty-control">
+                    <button class="qty-minus" data-id="${equipId}">-</button>
+                    <input type="number" class="qty-input" data-id="${equipId}" data-max="${maxQty}" value="1">
+                    <button class="qty-plus" data-id="${equipId}">+</button>
+                </div>
+            `;
+        }
+        function revertToBorrowButton(equipId) {
+            const cell = document.querySelector(`.action-cell[data-id='${equipId}']`);
+            cell.innerHTML = `<button class="borrow-btn" data-id="${equipId}">{{ _('Borrow') }}</button>`;
+        }
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('borrow-btn')) {
+                const equipId = e.target.getAttribute('data-id');
+                const maxQty = parseInt(document.querySelector(`.action-cell[data-id='${equipId}']`).getAttribute('data-max'));
+                if (maxQty > 0) showQuantitySelector(equipId, maxQty);
+            }
+            if (e.target.classList.contains('qty-minus')) {
+                const equipId = e.target.getAttribute('data-id');
+                const input = getQtyInput(equipId);
+                if (!input) return;
+                let val = parseInt(input.value);
+                const max = parseInt(input.getAttribute('data-max'));
+                val = Math.min(max, Math.max(0, val - 1));
+                input.value = val;
+                if (val === 0) revertToBorrowButton(equipId);
+            }
+            if (e.target.classList.contains('qty-plus')) {
+                const equipId = e.target.getAttribute('data-id');
+                const input = getQtyInput(equipId);
+                if (!input) return;
+                let val = parseInt(input.value);
+                const max = parseInt(input.getAttribute('data-max'));
+                val = Math.min(max, val + 1);
+                input.value = val;
+            }
+        });
+        document.getElementById('nextCartBtn').addEventListener('click', function() {
+            const cart = [];
+            document.querySelectorAll('.qty-input').forEach(inp => {
+                const qty = parseInt(inp.value);
+                if (qty > 0) {
+                    const equipId = inp.getAttribute('data-id');
+                    cart.push({equipment_id: equipId, quantity: qty});
+                }
+            });
+            fetch('/update_cart', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({cart: cart})
+            }).then(res => res.json()).then(data => {
+                if (data.success) window.location.href = '/cart';
+                else alert('{{ _("Error updating cart") }}');
+            });
+        });
+    })();
+</script>
+{% endblock %}

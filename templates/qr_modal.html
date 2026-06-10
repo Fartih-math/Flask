@@ -1,0 +1,15 @@
+{% extends "customer_dashboard.html" %}
+{% block content %}
+<div class="qr-center-container">
+    <div class="qr-content">
+        <h2>{{ _('Your Borrowing QR Code') }}</h2>
+        <p><strong>{{ _('Session') }} #{{ borrow_session.id }}</strong></p>
+        <p>{{ _('Due date') }}: {{ borrow_session.due_date.strftime('%Y-%m-%d') }}</p>
+        <div class="qr-image-wrapper">
+            <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code">
+        </div>
+        <p class="qr-note">{{ _('Show this QR code to admin when returning items.') }}</p>
+        <a href="{{ url_for('my_loans') }}" class="qr-back-btn">{{ _('Back to My Loans') }}</a>
+    </div>
+</div>
+{% endblock %}

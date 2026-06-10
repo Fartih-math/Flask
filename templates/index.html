@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Equipment Loan Tracker') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+    <div class="top-right">
+        <a href="{{ url_for('toggle_language') }}" class="lang-switch">
+            <span class="lang-option {% if lang == 'en' %}lang-active{% else %}lang-inactive{% endif %}">EN</span>
+            <span class="lang-option {% if lang == 'id' %}lang-active{% else %}lang-inactive{% endif %}">ID</span>
+        </a>
+    </div>
+
+    <div class="glass-card">
+        <h1>{{ _('Equipment Loan Tracker') }}</h1>
+        <div class="sub">{{ _('Borrow & Return with QR Security') }}</div>
+        <div class="btn-group">
+            <a href="{{ url_for('login') }}" class="btn-glass">{{ _('Login as Customer') }}</a>
+            <a href="{{ url_for('admin_login') }}" class="btn-glass">{{ _('Login as Admin') }}</a>
+        </div>
+        <a href="{{ url_for('register') }}" class="register-link">{{ _("Don't have an account? Register here") }}</a>
+    </div>
+</body>
+</html>

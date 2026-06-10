@@ -1,0 +1,33 @@
+{% extends "customer_dashboard.html" %}
+{% block content %}
+<div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <h2 style="margin-bottom: 20px;">{{ _('Your Cart') }}</h2>
+    {% if items %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">{{ _('Item') }}</th>
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">{{ _('Quantity') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 10px;">{{ item.equipment.name }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">{{ item.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="POST" action="{{ url_for('checkout') }}" style="margin-top: 20px;">
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">{{ _('Due Date') }}:</label>
+                <input type="date" name="due_date" value="{{ default_due }}" required style="padding: 8px; margin-left: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+            <button type="submit" style="background: #3498db; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer;">{{ _('Confirm Borrowing') }}</button>
+        </form>
+    {% else %}
+        <p>{{ _('Cart is empty') }}.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Register') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+    <div class="top-right">
+        <a href="{{ url_for('toggle_language') }}" class="lang-switch">
+            <span class="lang-option {% if lang == 'en' %}lang-active{% else %}lang-inactive{% endif %}">EN</span>
+            <span class="lang-option {% if lang == 'id' %}lang-active{% else %}lang-inactive{% endif %}">ID</span>
+        </a>
+    </div>
+
+    <div class="glass-card">
+        <h1>{{ _('Register') }}</h1>
+        <div class="sub">{{ _('Create a new account') }}</div>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="{{ _('Username') }}" required class="glass-input">
+            <input type="password" name="password" placeholder="{{ _('Password') }}" required class="glass-input">
+            <input type="text" name="name" placeholder="{{ _('Full Name') }}" required class="glass-input">
+            <select name="role" class="glass-input">
+                <option value="customer">{{ _('Customer') }}</option>
+                <option value="admin">{{ _('Admin') }}</option>
+            </select>
+            <button type="submit" class="btn-glass" style="width:100%; margin-top:10px;">{{ _('Register') }}</button>
+        </form>
+    </div>
+</body>
+</html>

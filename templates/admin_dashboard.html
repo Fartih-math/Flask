@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Admin Dashboard') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <div class="top-nav">
+        <button class="hamburger" id="hamburger">☰</button>
+        <div class="logo" onclick="window.location.href='{{ url_for('admin_dashboard') }}'">
+            Admin<span>Panel</span>
+        </div>
+        <div class="user-info">
+            <a href="{{ url_for('toggle_language') }}" class="lang-switch">
+                <span class="lang-option {% if lang == 'en' %}lang-active{% else %}lang-inactive{% endif %}">EN</span>
+                <span class="lang-option {% if lang == 'id' %}lang-active{% else %}lang-inactive{% endif %}">ID</span>
+            </a>
+            <span>{{ _('Admin') }}: {{ session.username }}</span>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <ul class="top-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}">📊 {{ _('Dashboard') }}</a></li>
+            <li><a href="{{ url_for('admin_scan_qr') }}">📷 {{ _('Scan QR') }}</a></li>
+            <li><a href="{{ url_for('admin_profile') }}">👤 {{ _('Profile') }}</a></li>
+        </ul>
+        <ul class="bottom-menu">
+            <li><a href="{{ url_for('admin_logout') }}">🚪 {{ _('Logout') }}</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        {% block admin_content %}
+        <!-- Equipment Management Card -->
+        <div class="card">
+            <h3>📦 {{ _('Equipment Management') }}</h3>
+            <table>
+                <thead>
+                    <tr><th>{{ _('ID') }}</th><th>{{ _('Name') }}</th><th>{{ _('Amount') }}</th></tr>
+                </thead>
+                <tbody>
+                    {% for eq in equipment %}
+                    <tr>
+                        <td>{{ eq.id }}</td>
+                        <td>{{ eq.name }}</td>
+                        <td>{{ eq.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="inline-forms">
+                <div class="form-card">
+                    <h4>➕ {{ _('Add New Equipment') }}</h4>
+                    <form method="POST" action="{{ url_for('admin_edit_equipment') }}">
+                        <input type="hidden" name="action" value="add">
+                        <input type="text" name="name" placeholder="{{ _('Equipment Name') }}" required>
+                        <input type="number" name="amount" placeholder="{{ _('Initial Amount') }}" required>
+                        <button type="submit">{{ _('Add Equipment') }}</button>
+                    </form>
+                </div>
+                <div class="form-card">
+                    <h4>✏️ {{ _('Update Equipment') }}</h4>
+                    <form method="POST" action="{{ url_for('admin_edit_equipment') }}">
+                        <input type="hidden" name="action" value="update">
+                        <input type="number" name="id" placeholder="{{ _('Equipment ID') }}" required>
+                        <input type="text" name="name" placeholder="{{ _('New Name (optional)') }}">
+                        <input type="number" name="amount" placeholder="{{ _('New Amount (optional)') }}">
+                        <button type="submit">{{ _('Update') }}</button>
+                    </form>
+                </div>
+                <div class="form-card">
+                    <h4>🗑️ {{ _('Delete Equipment') }}</h4>
+                    <form method="POST" action="{{ url_for('admin_edit_equipment') }}" onsubmit="return confirm('{{ _('Permanently delete this equipment?') }}')">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="number" name="id" placeholder="{{ _('Equipment ID') }}" required>
+                        <button type="submit" class="delete">{{ _('Delete') }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Borrowing Sessions Card -->
+        <div class="card">
+            <h3>📋 {{ _('Borrowing Sessions') }}</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{ _('ID') }}</th><th>{{ _('User') }}</th><th>{{ _('Borrow Date') }}</th>
+                            <th>{{ _('Due Date') }}</th><th>{{ _('Return Date') }}</th>
+                            <th>{{ _('Status') }}</th><th>{{ _('Items') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sessions %}
+                        <tr>
+                            <td>{{ s.id }}</td>
+                            <td>{{ s.user.username }}</td>
+                            <td>{{ s.borrow_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ s.due_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ s.return_date.strftime('%Y-%m-%d') if s.return_date else '-' }}</td>
+                            <td>{{ _(s.return_status) if s.return_status else _('active') }}</td>
+                            <td>
+                                {% for i in s.items %}
+                                    {{ i.equipment.name }} x{{ i.quantity }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

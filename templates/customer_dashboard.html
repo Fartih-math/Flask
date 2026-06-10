@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Customer Dashboard') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <div class="top-nav">
+        <button class="hamburger" id="hamburger">☰</button>
+        <div class="logo" onclick="window.location.href='{{ url_for('customer_dashboard') }}'">
+            Equipment<span>Tracker</span>
+        </div>
+        <div class="user-info">
+            <a href="{{ url_for('toggle_language') }}" class="lang-switch">
+                <span class="lang-option {% if lang == 'en' %}lang-active{% else %}lang-inactive{% endif %}">EN</span>
+                <span class="lang-option {% if lang == 'id' %}lang-active{% else %}lang-inactive{% endif %}">ID</span>
+            </a>
+            <span>{{ _('Welcome back') }}, {{ session.username }}!</span>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul class="top-menu">
+            <li><a href="{{ url_for('borrow_equipment') }}">📦 {{ _('Borrow Equipment') }}</a></li>
+            <li><a href="{{ url_for('my_loans') }}">📋 {{ _('My Loans') }}</a></li>
+            <li><a href="{{ url_for('profile') }}">👤 {{ _('Profile') }}</a></li>
+        </ul>
+        <ul class="bottom-menu">
+            <li><a href="{{ url_for('logout') }}">🚪 {{ _('Logout') }}</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="mainContent">
+        {% block content %}
+        <div class="welcome-card">
+            <h2>{{ _('Welcome back') }}, {{ session.username }}! 🎉</h2>
+            <p>{{ _("Here's how to borrow equipment and manage your loans") }}:</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="number">1</div>
+                    <strong>{{ _('Browse') }}</strong>
+                    <p>{{ _("Go to 'Borrow Equipment' and select items you need") }}.</p>
+                </div>
+                <div class="step">
+                    <div class="number">2</div>
+                    <strong>{{ _('Add to Cart') }}</strong>
+                    <p>{{ _('Choose quantity and due date for each item') }}.</p>
+                </div>
+                <div class="step">
+                    <div class="number">3</div>
+                    <strong>{{ _('Checkout') }}</strong>
+                    <p>{{ _('Confirm your borrowing session and get a QR code') }}.</p>
+                </div>
+                <div class="step">
+                    <div class="number">4</div>
+                    <strong>{{ _('Return') }}</strong>
+                    <p>{{ _('Show the QR code to admin when returning items') }}.</p>
+                </div>
+            </div>
+        </div>
+        <p>{{ _('Select an option from the left menu to get started') }}.</p>
+        {% endblock %}
+    </div>
+</body>
+</html>

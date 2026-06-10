@@ -1,0 +1,44 @@
+{% extends "customer_dashboard.html" %}
+{% block content %}
+<div class="loan-details-card">
+    <h2>{{ _('Loan Details') }} #{{ borrow_session.id }}</h2>
+
+    <p><strong>{{ _('Borrow Date') }}:</strong> {{ borrow_session.borrow_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ _('Due Date') }}:</strong> {{ borrow_session.due_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ _('Status') }}:</strong>
+        {% if borrow_session.return_date %}
+            {{ _('Returned') }} {{ _('on') }} {{ borrow_session.return_date.strftime('%Y-%m-%d') }} ({{ _(borrow_session.return_status) }})
+        {% else %}
+            {% if borrow_session.is_late %}<span class="late-text">{{ _('LATE') }}</span>{% else %}{{ _('Active') }}{% endif %}
+        {% endif %}
+    </p>
+
+    <h3>{{ _('Items Borrowed') }}</h3>
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th>{{ _('Item') }}</th>
+                <th>{{ _('Quantity') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.equipment.name }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not borrow_session.return_date %}
+        <div class="qr-button-container">
+            <a href="{{ url_for('show_session_qr', session_id=borrow_session.id) }}" class="btn-qr">{{ _('Show QR Code') }}</a>
+        </div>
+    {% endif %}
+
+    <div class="back-button-container">
+        <a href="{{ url_for('my_loans') }}" class="btn-back">← {{ _('Back to My Loans') }}</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "customer_dashboard.html" %}
+{% block content %}
+<div class="loans-card">
+    <h2>{{ _('My Loans') }}</h2>
+    <table class="loans-table">
+        <thead>
+            <tr>
+                <th>{{ _('Borrow Date') }}</th>
+                <th>{{ _('Due Date') }}</th>
+                <th>{{ _('Status') }}</th>
+                <th>{{ _('Details') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sess in sessions %}
+            <tr>
+                <td>{{ sess.borrow_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ sess.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    {% if sess.return_date %}
+                        {{ _('Returned') }} ({{ _(sess.return_status) }})
+                    {% else %}
+                        {% if sess.is_late %}<span class="late-text">{{ _('LATE') }}</span>{% else %}{{ _('Active') }}{% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('loan_details', session_id=sess.id) }}" class="details-btn">{{ _('View Details') }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

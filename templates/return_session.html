@@ -1,0 +1,54 @@
+{% extends "admin_dashboard.html" %}
+{% block admin_content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">{{ _('Return Borrowing Session') }} #{{ session.id }}</h2>
+
+    <div style="margin-bottom: 15px;">
+        <strong>{{ _('User:') }}</strong> {{ session.user.username }}
+    </div>
+    <div style="margin-bottom: 15px;">
+        <strong>{{ _('Borrow Date:') }}</strong> {{ session.borrow_date.strftime('%Y-%m-%d') }}
+    </div>
+    <div style="margin-bottom: 15px;">
+        <strong>{{ _('Due Date:') }}</strong> {{ session.due_date.strftime('%Y-%m-%d') }}
+    </div>
+
+    <strong>{{ _('Items:') }}</strong>
+    <table class="items-table" style="margin: 10px 0 20px 0;">
+        <thead>
+            <tr>
+                <th>{{ _('Equipment') }}</th>
+                <th>{{ _('Quantity') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.equipment.name }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="POST" action="{{ url_for('admin_process_return') }}">
+        <input type="hidden" name="session_id" value="{{ session.id }}">
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ _('Return status:') }}</label>
+            <select name="action" style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ddd; width: auto; min-width: 200px;">
+                <option value="normal">{{ _('Normal (return items to stock)') }}</option>
+                <option value="missing">{{ _('Missing (items not returned)') }}</option>
+                <option value="damaged">{{ _('Damaged') }}</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ _('Note (optional):') }}</label>
+            <input type="text" name="note" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px;">
+        </div>
+
+        <button type="submit" class="btn">{{ _('Process Return') }}</button>
+    </form>
+</div>
+{% endblock %}
