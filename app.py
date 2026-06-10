@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import secrets
 import os
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 database_url = os.environ.get('DATABASE_URL')
 if database_url and database_url.startswith('postgres://'):
